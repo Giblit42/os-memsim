@@ -10,6 +10,7 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
 void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *value, Mmu *mmu, PageTable *page_table, void *memory);
 void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_table);
 void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table);
+void *memory = malloc(1000);
 
 int main(int argc, char **argv)
 {
@@ -39,7 +40,27 @@ int main(int argc, char **argv)
     while (command != "exit") {
         // Handle command
         // TODO: implement this!
-
+	if(command == "create"){
+	
+	}
+	if(command == "allocate"){
+	
+	}
+	if(command == "set"){
+	
+	}
+	if(command == "free"){
+	
+	}
+	if(command == "terminate"){
+	
+	}
+	if(command == "print"){
+	
+	}
+	if(command == "exit"){
+		exit(0);
+	}
         // Get next command
         std::cout << "> ";
         std::getline (std::cin, command);
@@ -74,8 +95,17 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
 {
     // TODO: implement this!
     //   - create new process in the MMU
+    
     //   - allocate new variables for the <TEXT>, <GLOBALS>, and <STACK>
+    void *charptr = (char*)malloc(sizeof(char));
+    void *shortsptr = (short*)malloc(2*sizeof(short));
+    void *intsptr = (int*)malloc(4*sizeof(int));
+    void *floatsptr = (float*)malloc(4*sizeof(float));
+    void *longsptr = (long*)malloc(8*sizeof(long));
+    void *doublesptr = (double*)malloc(8*sizeof(double));
+    
     //   - print pid
+    
 }
 
 void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table)
