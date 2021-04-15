@@ -97,12 +97,9 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
     //   - create new process in the MMU
     
     //   - allocate new variables for the <TEXT>, <GLOBALS>, and <STACK>
-    void *charptr = (char*)malloc(sizeof(char));
-    void *shortsptr = (short*)malloc(2*sizeof(short));
-    void *intsptr = (int*)malloc(4*sizeof(int));
-    void *floatsptr = (float*)malloc(4*sizeof(float));
-    void *longsptr = (long*)malloc(8*sizeof(long));
-    void *doublesptr = (double*)malloc(8*sizeof(double));
+    void *text = malloc(2048 * sizeof(int32_t));
+    void *globals = malloc(1024 * sizeof(int32_t));
+    void *stack = malloc(65536 * sizeof(int32_t));
     
     //   - print pid
     
