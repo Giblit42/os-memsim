@@ -95,13 +95,14 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
 {
     // TODO: implement this!
     //   - create new process in the MMU
-    
+    mmu->createProcess();
     //   - allocate new variables for the <TEXT>, <GLOBALS>, and <STACK>
     void *text = malloc(2048 * sizeof(int32_t));
     void *globals = malloc(1024 * sizeof(int32_t));
     void *stack = malloc(65536 * sizeof(int32_t));
     
     //   - print pid
+    printf("PID ");
     
 }
 
