@@ -62,6 +62,7 @@ void Mmu::print()
         for (j = 0; j < _processes[i]->variables.size(); j++)
         {
             // TODO: print all variables (excluding <FREE_SPACE> entries)
+            printf("%5u | %s | %d | %d", pid, variables, virtual_address, size);
         }
     }
 }
