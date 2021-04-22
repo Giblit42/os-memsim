@@ -28,17 +28,22 @@ void PageTable::addEntry(uint32_t pid, int page_number)
 {
     // Combination of pid and page number act as the key to look up frame number
     std::string entry = std::to_string(pid) + "|" + std::to_string(page_number);
-
+	// frame number is not entry
     int frame = 0; 
     // Find free frame
-    if(_table[entry] == null)
-    {
-        _table[entry] = frame;
-    }
-    //page replacement
-    
     // TODO: implement this!
-    _table[entry] = frame;
+    for(frame; frame < page_size; frame++)
+    {
+    // checks to see if the page is using the frame if not it will use this frame
+       if(_table[entry] != frame)
+       {
+       	_table[entry] = frame;
+       }
+    }
+    
+    //check if any page is using frame zero
+    // if so check if any are using frame 1
+    
 }
 
 int PageTable::getPhysicalAddress(uint32_t pid, uint32_t virtual_address)
@@ -51,11 +56,11 @@ int PageTable::getPhysicalAddress(uint32_t pid, uint32_t virtual_address)
     std::string entry = std::to_string(pid) + "|" + std::to_string(page_number);
     
     // If entry exists, look up frame number and convert virtual to physical address
-    // entry is frame number 
+    // is entry the frame number 
     int address = -1;
     if (_table.count(entry) > 0)
     {
-       address = entry + page_offset;
+       address = (_page_size*_table[entry]) + page_offset;
     }
 
     return address;
