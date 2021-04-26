@@ -20,6 +20,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Error: you must specify the page size\n");
         return 1;
     }
+    int text_size = 0;
 
     // Print opening instuction message
     int page_size = std::stoi(argv[1]);
@@ -41,22 +42,23 @@ int main(int argc, char **argv)
         // Handle command
         // TODO: implement this!
 	if(command == "create"){
-	
+	 //how do we get the text size?
+		//createProcess(text_size, mem_size, mmu, page_table);
 	}
 	if(command == "allocate"){
-	
+		//allocateVariable(mmu->createProcess(), var_name, type, num_elements, mmu, page_table);
 	}
 	if(command == "set"){
-	
+		//setVariable(mmu->createProcess(), var_name, offset, value, mmu, page_table, memory);
 	}
 	if(command == "free"){
-	
+		//freeVariable(mmu->createProcess(), var_name, mmu, page_table);
 	}
 	if(command == "terminate"){
-	
+		//terminateProcess(mmu->createProcess(), mmu, page_table);
 	}
 	if(command == "print"){
-	
+		//printStartMessage(page_size);
 	}
 	if(command == "exit"){
 		exit(0);
@@ -102,24 +104,41 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
     void *stack = malloc(65536 * sizeof(int32_t));
     
     //   - print pid
-    printf("PID ");
+    //I think the pid comes from createProcess
+    printf("PID %s", mmu->createProcess());
     
 }
 
 void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table)
 {
+	int page_number = 0;
+	//would the virtual_address be the num_elements?
+	
     // TODO: implement this!
     //   - find first free space within a page already allocated to this process that is large enough to fit the new variable
+    pagetable->addEntry(pid, page_number);
     //   - if no hole is large enough, allocate new page(s)
+    
+    // how do I all ocate new pages? Is it by increasing the page size or adding more pages?
+    
     //   - insert variable into MMU
-    //   - print virtual memory address
+    //whaere do I get the virtual address from?
+    mmu->addVariableToProcess(pid, var_name, type, size, pagetable->getPhysicalAddress(pid, num_elements));
+    
+    //   - print virtual memory address 
+    printf("Virtual address %s", virtual_address);
+
 }
 
 void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *value, Mmu *mmu, PageTable *page_table, void *memory)
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
+    pagetable->getPhysicalAddress(pid, offset);
     //   - insert `value` into `memory` at physical address
+    
+    // would we call addEntry here?
+    
     //   * note: this function only handles a single element (i.e. you'll need to call this within a loop when setting
     //           multiple elements of an array)
 }
@@ -128,12 +147,25 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
 {
     // TODO: implement this!
     //   - remove entry from MMU
+    
+    var_name = mmu;
+    
     //   - free page if this variable was the only one on a given page
+    for(int i = 0; i < page_size; i++)
+    {
+    //how do I free a page?
+    	if(page_table == null)
+    	{
+    		page_table = null;
+    	}
+    }
 }
 
 void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
     //   - remove process from MMU
+    mmu = pid;
     //   - free all pages associated with given process
+    page_table = pid;
 }
