@@ -43,9 +43,11 @@ int main(int argc, char **argv)
         // TODO: implement this!
 	if(command == "create"){
 	 //how do we get the text size?
+	 // string plit
 		//createProcess(text_size, mem_size, mmu, page_table);
 	}
 	if(command == "allocate"){
+		//Do I need to read in variables the user is going to enter?
 		//allocateVariable(mmu->createProcess(), var_name, type, num_elements, mmu, page_table);
 	}
 	if(command == "set"){
@@ -96,6 +98,9 @@ void printStartMessage(int page_size)
 void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
+    
+    //what is data_size used for? data_size is for globals
+    // text size is for text
     //   - create new process in the MMU
     mmu->createProcess();
     //   - allocate new variables for the <TEXT>, <GLOBALS>, and <STACK>
@@ -113,6 +118,9 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
 {
 	int page_number = 0;
 	//would the virtual_address be the num_elements?
+	// what is var_name used for?
+	// what is type used for? helps determine how big of a space you need
+	//what is num_elements used for?
 	
     // TODO: implement this!
     //   - find first free space within a page already allocated to this process that is large enough to fit the new variable
@@ -134,10 +142,16 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
+    //git virtual from variable name and pid located in mmu
+    // then add offset to virtual * datasize(of datatype)
+    //this is will be used to get physical address
+    
+    // do I need to find the virtual offset or can I pass in the offset?
     pagetable->getPhysicalAddress(pid, offset);
     //   - insert `value` into `memory` at physical address
     
     // would we call addEntry here?
+    //use void memory pointer to copy data into memory
     
     //   * note: this function only handles a single element (i.e. you'll need to call this within a loop when setting
     //           multiple elements of an array)
@@ -148,9 +162,14 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     // TODO: implement this!
     //   - remove entry from MMU
     
+    // to remove somthing do I need to dereference it?
+    //in mmu change variable name to free space type to free space
+    // double check if the things before and after are free if so join free space
     var_name = mmu;
     
     //   - free page if this variable was the only one on a given page
+    // if no other variables have address on the page then the page should become free
+    //page table is a map 
     for(int i = 0; i < page_size; i++)
     {
     //how do I free a page?
@@ -165,6 +184,8 @@ void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
     //   - remove process from MMU
+    
+    // just delete everything associated with the PID
     mmu = pid;
     //   - free all pages associated with given process
     page_table = pid;
