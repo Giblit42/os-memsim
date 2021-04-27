@@ -5,7 +5,7 @@
 #include "pagetable.h"
 #include <stdio.h>
 #include <vector>
-
+#include <bits/stdc++.h>
 void printStartMessage(int page_size);
 void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table);
 void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table);
@@ -41,33 +41,75 @@ int main(int argc, char **argv)
     std::string command;
     std::cout << "> ";
     std::getline (std::cin, command);
+
     while (command != "exit") {
-    	char *token = strtok(command, " ");
-    	while(token != null)
-    	{
-    	   commands.push_back(token);
-    	}
-    	
+        std::vector<std::string> commandV;
+    	int i;
+        std::string temp = "";
+        for(i = 0; i< command.size(); i++){
+            if(command.at(i) == ' '){
+                commandV.push_back(temp);
+                temp = "";
+            }else{
+                temp = temp + command.at(i);
+            }
+        }
+            	
         // Handle command
         // TODO: implement this!
-	if(commands.at(0) == "create"){
-		createProcess(commands.at(1), commands.at(2), mmu, page_table);
-	}
-	if(commands.at(0) == "allocate"){
-		allocateVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table);
-	}
-	if(commands.at(0) == "set"){
-		setVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table, memory);
-	}
-	if(commands.at(0) == "free"){
-		freeVariable(commands.at(1), commands.at(2), mmu, page_table);
-	}
-	if(commands.at(0) == "terminate"){
-		terminateProcess(commands.at(1), mmu, page_table);
-	}
-	if(commands.at(0) == "print"){
-		printStartMessage(commands.at(1));
-	}
+
+        if(commandV.at(0)== "create"){
+            createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
+        }else if(commandV.at(0)== "allocate"){
+            DataType type;
+
+            if(commandV.at(3)=="char"){
+                type = Char;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else if(commandV.at(3)=="short"){
+                type = Short;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else if(commandV.at(3)=="int"){
+                type = Int;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else if(commandV.at(3)=="float"){
+                type = Float;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else if(commandV.at(3)=="long"){
+                type = Long;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else if(commandV.at(3)=="double"){
+                type = Double;
+                allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
+            }else{
+                std::cout << "type not recognized" << std::endl;
+            }
+        }else if(commandV.at(0)=="set"){
+            //set wacky since it can have a bunch of values 
+            //void pointer eh?
+            std::string voidPoint = "";
+            for(int i = 3; i < commandV.size(); i++){
+                voidPoint = voidPoint + commandV.at(1);
+                if(i != commandV.size()){
+                    voidPoint = voidPoint + " ";
+                }
+            }
+            setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
+        }else if(commandV.at(0)=="free"){
+            freeVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), mmu, page_table);
+        }else if(commandV.at(0)== "print"){
+            if(commandV.at(1)== "mmu"){
+                mmu->print();
+            }else if(commandV.at(1)== "page"){
+                page_table->print();
+            }else if(commandV.at(1) == "process"){
+                
+            }//need pid and varname to print some stuff after
+        }else{
+            std::cout << "Command not recognized" << std::endl;
+        }
+
+
 	if(commands.at(0) == "exit"){
 		exit(0);
 	}
@@ -131,17 +173,21 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
 	
     // TODO: implement this!
     //   - find first free space within a page already allocated to this process that is large enough to fit the new variable
-    pagetable->addEntry(pid, page_number);
+    page_table->addEntry(pid, page_number);
     //   - if no hole is large enough, allocate new page(s)
     
     // how do I all ocate new pages? Is it by increasing the page size or adding more pages?
     
     //   - insert variable into MMU
     //whaere do I get the virtual address from?
-    mmu->addVariableToProcess(pid, var_name, type, size, pagetable->getPhysicalAddress(pid, num_elements));
+    mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
     
     //   - print virtual memory address 
+
     printf("Virtual address %s", virtual_address);
+
+
+    //printf("Virtual address %s", virtual_address);
 
 }
 
