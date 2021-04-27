@@ -50,22 +50,22 @@ int main(int argc, char **argv)
     	
         // Handle command
         // TODO: implement this!
-	if(commands.at(0) == "create"){
-		createProcess(commands.at(1), commands.at(2), commands.at(3), commands.at(4));
+	if(commands.at(0) == "c"){
+		createProcess(commands.at(1), commands.at(2), mmu, page_table);
 	}
-	if(commands.at(0) == "allocate"){
-		allocateVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), commands.at(5), commands.at(6));
+	if(commands.at(0) == "a"){
+		allocateVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table);
 	}
-	if(commands.at(0) == "set"){
-		setVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), commands.at(5), commands.at(6), commands.at(7));
+	if(commands.at(0) == "s"){
+		setVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table, memory);
 	}
-	if(commands.at(0) == "free"){
-		freeVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4));
+	if(commands.at(0) == "f"){
+		freeVariable(commands.at(1), commands.at(2), mmu, page_table);
 	}
-	if(commands.at(0) == "terminate"){
-		terminateProcess(commands.at(1), commands.at(2), commands.at(3));
+	if(commands.at(0) == "t"){
+		terminateProcess(commands.at(1), mmu, page_table);
 	}
-	if(commands.at(0) == "print"){
+	if(commands.at(0) == "p"){
 		printStartMessage(commands.at(1));
 	}
 	if(commands.at(0) == "exit"){
@@ -105,13 +105,11 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
 {
     // TODO: implement this!
     
-    //what is data_size used for? data_size is for globals
-    // text size is for text
     //   - create new process in the MMU
     mmu->createProcess();
     //   - allocate new variables for the <TEXT>, <GLOBALS>, and <STACK>
-    void *text = malloc(2048 * sizeof(int32_t));
-    void *globals = malloc(1024 * sizeof(int32_t));
+    void *text = malloc(2048 * sizeof(text_size));
+    void *globals = malloc(1024 * sizeof(data_size));
     void *stack = malloc(65536 * sizeof(int32_t));
     
     //   - print pid
