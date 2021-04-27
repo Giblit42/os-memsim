@@ -3,6 +3,8 @@
 #include <cstring>
 #include "mmu.h"
 #include "pagetable.h"
+#include <stdio.h>
+#include <vector>
 
 void printStartMessage(int page_size);
 void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table);
@@ -14,6 +16,7 @@ void *memory = malloc(1000);
 
 int main(int argc, char **argv)
 {
+	std::vector<std::string> commands;
     // Ensure user specified page size as a command line parameter
     if (argc < 2)
     {
@@ -39,30 +42,33 @@ int main(int argc, char **argv)
     std::cout << "> ";
     std::getline (std::cin, command);
     while (command != "exit") {
+    	char *token = strtok(command, " ");
+    	while(token != null)
+    	{
+    	   commands.push_back(token);
+    	}
+    	
         // Handle command
         // TODO: implement this!
-	if(command == "create"){
-	 //how do we get the text size?
-	 // string plit
-		//createProcess(text_size, mem_size, mmu, page_table);
+	if(commands.at(0) == "create"){
+		createProcess(commands.at(1), commands.at(2), commands.at(3), commands.at(4));
 	}
-	if(command == "allocate"){
-		//Do I need to read in variables the user is going to enter?
-		//allocateVariable(mmu->createProcess(), var_name, type, num_elements, mmu, page_table);
+	if(commands.at(0) == "allocate"){
+		allocateVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), commands.at(5), commands.at(6));
 	}
-	if(command == "set"){
-		//setVariable(mmu->createProcess(), var_name, offset, value, mmu, page_table, memory);
+	if(commands.at(0) == "set"){
+		setVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), commands.at(5), commands.at(6), commands.at(7));
 	}
-	if(command == "free"){
-		//freeVariable(mmu->createProcess(), var_name, mmu, page_table);
+	if(commands.at(0) == "free"){
+		freeVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4));
 	}
-	if(command == "terminate"){
-		//terminateProcess(mmu->createProcess(), mmu, page_table);
+	if(commands.at(0) == "terminate"){
+		terminateProcess(commands.at(1), commands.at(2), commands.at(3));
 	}
-	if(command == "print"){
-		//printStartMessage(page_size);
+	if(commands.at(0) == "print"){
+		printStartMessage(commands.at(1));
 	}
-	if(command == "exit"){
+	if(commands.at(0) == "exit"){
 		exit(0);
 	}
         // Get next command
