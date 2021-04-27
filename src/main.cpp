@@ -50,26 +50,29 @@ int main(int argc, char **argv)
     	
         // Handle command
         // TODO: implement this!
-	if(commands.at(0) == "c"){
+	if(commands.at(0) == "create"){
 		createProcess(commands.at(1), commands.at(2), mmu, page_table);
 	}
-	if(commands.at(0) == "a"){
+	if(commands.at(0) == "allocate"){
 		allocateVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table);
 	}
-	if(commands.at(0) == "s"){
+	if(commands.at(0) == "set"){
 		setVariable(commands.at(1), commands.at(2), commands.at(3), commands.at(4), mmu, page_table, memory);
 	}
-	if(commands.at(0) == "f"){
+	if(commands.at(0) == "free"){
 		freeVariable(commands.at(1), commands.at(2), mmu, page_table);
 	}
-	if(commands.at(0) == "t"){
+	if(commands.at(0) == "terminate"){
 		terminateProcess(commands.at(1), mmu, page_table);
 	}
-	if(commands.at(0) == "p"){
+	if(commands.at(0) == "print"){
 		printStartMessage(commands.at(1));
 	}
 	if(commands.at(0) == "exit"){
 		exit(0);
+	}
+	else{
+		printf("error: command not recognized");
 	}
         // Get next command
         std::cout << "> ";
@@ -166,22 +169,33 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     // TODO: implement this!
     //   - remove entry from MMU
     
-    // to remove somthing do I need to dereference it?
     //in mmu change variable name to free space type to free space
-    // double check if the things before and after are free if so join free space
-    var_name = mmu;
+    mmu->var->name = "<FREE_SPACE>";
     
-    //   - free page if this variable was the only one on a given page
-    // if no other variables have address on the page then the page should become free
-    //page table is a map 
+    // double check if the things before and after are free if so join free space
+    //?
     for(int i = 0; i < page_size; i++)
     {
-    //how do I free a page?
-    	if(page_table == null)
+    	if(mmu->var->i == mmu->var->i+1)
     	{
-    		page_table = null;
+    		mmu->var->size->i + mmu->var->size->i+1;
+    	}
+    	else if(mmu->var->i == mmu->var->i-1)
+    	{
+    		mmu->var->size->i + mmu->var->size->i-1;
+    	}
+    	else if(mmu->var->i == mmu->var->i-1 && mmu->var->i == mmu->var->i+1)
+    	{
+    		mmu->var->size->i + mmu->var->size->i-1 + mmu->var->size->i+1;
     	}
     }
+    
+    //   - free page if this variable was the only one on a given page
+    page_table.clear();
+    // if no other variables have address on the page then the page should become free
+    
+    //page table is a map 
+    
 }
 
 void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
