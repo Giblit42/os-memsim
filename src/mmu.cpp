@@ -66,3 +66,14 @@ void Mmu::print()
         }
     }
 }
+std::vector<Variable*>& Mmu::getVariables(uint32_t pid)
+{
+	int i;
+	for (i = 0; i < _processes.size(); i++)
+	{
+		if(_processes[i]->pid == pid)
+		{
+			return _processes[i]->variables;
+		}
+	}
+}
