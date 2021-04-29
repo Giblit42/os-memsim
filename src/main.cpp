@@ -214,6 +214,7 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
 {
     // TODO: implement this!
     //   - remove entry from MMU
+    std::vector<std::string>:: iterator it = page_table.begin();
     
     //in mmu change variable name to free space type to free space
     mmu->var->name = "<FREE_SPACE>";
@@ -237,8 +238,10 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     }
     
     //   - free page if this variable was the only one on a given page
-    page_table.clear();
+    
+    page_table.erase(var_name);
     // if no other variables have address on the page then the page should become free
+    page_table.erase(it, page_table.end());
     
     //page table is a map 
     
