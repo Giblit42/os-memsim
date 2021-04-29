@@ -192,20 +192,22 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
-    
+   
     //git virtual from variable name and pid located in mmu
     mmu->pid->var_name->virtual_address;
     
     // then add offset to virtual * datasize(of datatype)
-    mmu->var_name->virtual_address + offset *sizeof(var_name);
+    //create method to get the size of the data type
+    int datatypesize = //insert emthod call here
+    virtual_address + offset * datatypesize;
     
     //this is will be used to get physical address
-    value = pagetable->getPhysicalAddress(pid, mu->var_name->virtual_address + offset *sizeof(var_name));
+    addressvalue = pagetable->getPhysicalAddress(pid, line 201);
     
     //   - insert `value` into `memory` at physical address
-    memcpy((uint32_t)memory, &value);
+    memcpy((uint8_t*)memory + addressvalue, value, datatypesize);
     
-    // would we call addEntry here?
+
     //use void memory pointer to copy data into memory
     
     //   * note: this function only handles a single element (i.e. you'll need to call this within a loop when setting
@@ -223,41 +225,48 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     	if(var[i]->name == var_name)
     	{
     		var[i]->name = "<FREE_SPACE>";
-    		//var[i]->type;
+    		var[i]->type = FreeSpace;
+    		
+    		if(var[i]->name == var[i+1]->name)
+    		{
+    			var[i]->size + var[i]->size;
+    		}
+    		else if(var[i]->name == var[i-1]->name)
+    		{
+    			var[i]->size + var[i-1]->size;
+    		}
+    		else
+    		{
+    			var[i-1]->size + var[i]->size + var[i+1]->size;
+    		}
     	}
     }
+    
     
     //   - remove entry from MMU
-    std::vector<std::string>:: iterator it = page_table.begin();
-    
-    //in mmu change variable name to free space type to free space
-    mmu->var->name = "<FREE_SPACE>";
-    
-    // double check if the things before and after are free if so join free space
-    //?
-    for(int i = 0; i < page_size; i++)
+    if(page_table.find(var_name))
     {
-    	if(mmu->var->i == mmu->var->i+1)
+    	page_table.erase(var_name);
+    }
+    
+    
+    //   - free page if this variable was the only one on a given page
+    //loop over all the variables and see how many on each page (do this by checking virtual address)
+    //delete page from page table
+    // crete method to delete page form page table
+    for(i = 0; i < page_table.size(); i++)
+    {
+    	if(page_table.find(var_name) == i)
     	{
-    		mmu->var->size->i + mmu->var->size->i+1;
-    	}
-    	else if(mmu->var->i == mmu->var->i-1)
-    	{
-    		mmu->var->size->i + mmu->var->size->i-1;
-    	}
-    	else if(mmu->var->i == mmu->var->i-1 && mmu->var->i == mmu->var->i+1)
-    	{
-    		mmu->var->size->i + mmu->var->size->i-1 + mmu->var->size->i+1;
+    		
     	}
     }
     
-    //   - free page if this variable was the only one on a given page
     
-    page_table.erase(var_name);
+    
     // if no other variables have address on the page then the page should become free
     page_table.erase(it, page_table.end());
     
-    //page table is a map 
     
 }
 
@@ -265,9 +274,10 @@ void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
     //   - remove process from MMU
-    mmu->proc->pid
-    // just delete everything associated with the PID
+    // crete method to erase pid
+    mmu->_processes.erase(pid);
     
     //   - free all pages associated with given process
+    // create method erase all page associated with pid
     page_table.erase(pid);
 }
