@@ -181,13 +181,18 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
-    //git virtual from variable name and pid located in mmu
-    // then add offset to virtual * datasize(of datatype)
-    //this is will be used to get physical address
     
-    // do I need to find the virtual offset or can I pass in the offset?
-    pagetable->getPhysicalAddress(pid, offset);
+    //git virtual from variable name and pid located in mmu
+    mmu->pid->var_name->virtual_address;
+    
+    // then add offset to virtual * datasize(of datatype)
+    mmu->var_name->virtual_address + offset *sizeof(var_name);
+    
+    //this is will be used to get physical address
+    value = pagetable->getPhysicalAddress(pid, mu->var_name->virtual_address + offset *sizeof(var_name));
+    
     //   - insert `value` into `memory` at physical address
+    memcpy((uint32_t)memory, &value);
     
     // would we call addEntry here?
     //use void memory pointer to copy data into memory
@@ -199,6 +204,18 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
+    std::vector<Variable*> var = mmu->getVariables(pid);
+    
+    int i;
+    for(i = 0; i < var.size(); i++)
+    {
+    	if(var[i]->name == var_name)
+    	{
+    		var[i]->name = "<FREE_SPACE>";
+    		//var[i]->type;
+    	}
+    }
+    
     //   - remove entry from MMU
     std::vector<std::string>:: iterator it = page_table.begin();
     
@@ -237,9 +254,9 @@ void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
     //   - remove process from MMU
-    
+    mmu->proc->pid
     // just delete everything associated with the PID
-    mmu = pid;
+    
     //   - free all pages associated with given process
-    page_table = pid;
+    page_table.erase(pid);
 }
