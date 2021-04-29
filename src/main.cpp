@@ -57,12 +57,10 @@ int main(int argc, char **argv)
             	
         // Handle command
         // TODO: implement this!
-
         if(commandV.at(0)== "create"){
             createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
         }else if(commandV.at(0)== "allocate"){
             DataType type;
-
             if(commandV.at(3)=="char"){
                 type = Char;
                 allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
@@ -116,6 +114,7 @@ int main(int argc, char **argv)
 	else{
 		printf("error: command not recognized");
 	}
+
         // Get next command
         std::cout << "> ";
         std::getline (std::cin, command);
@@ -184,10 +183,8 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
     
     //   - print virtual memory address 
 
+
     printf("Virtual address %s", virtual_address);
-
-
-    //printf("Virtual address %s", virtual_address);
 
 }
 
