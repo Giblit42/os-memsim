@@ -61,6 +61,7 @@ int main(int argc, char **argv)
             createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
         }else if(commandV.at(0)== "allocate"){
             DataType type;
+            for(int i = 0; i < )
             if(commandV.at(3)=="char"){
                 type = Char;
                 allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
@@ -87,10 +88,8 @@ int main(int argc, char **argv)
             //void pointer eh?
             std::string voidPoint = "";
             for(int i = 3; i < commandV.size(); i++){
-                voidPoint = voidPoint + commandV.at(1);
-                if(i != commandV.size()){
-                    voidPoint = voidPoint + " ";
-                }
+                voidPoint = commandV.at(i);
+                setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
             }
             setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
         }else if(commandV.at(0)=="free"){
@@ -169,10 +168,10 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
 	// what is var_name used for?
 	// what is type used for? helps determine how big of a space you need
 	//what is num_elements used for?
-	
+	mmu->allocate(pid, var_name, type, num_elements, mmu, page_table, page_table->getSize());
     // TODO: implement this!
     //   - find first free space within a page already allocated to this process that is large enough to fit the new variable
-    page_table->addEntry(pid, page_number);
+    //page_table->addEntry(pid, page_number);
     //   - if no hole is large enough, allocate new page(s)
     
     // how do I all ocate new pages? Is it by increasing the page size or adding more pages?
@@ -247,6 +246,7 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     if(page_table.find(var_name))
     {
     	page_table.erase(var_name);
+        
     }
     
     
