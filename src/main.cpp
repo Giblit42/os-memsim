@@ -103,17 +103,15 @@ int main(int argc, char **argv)
             }else if(commandV.at(1) == "process"){
                 
             }//need pid and varname to print some stuff after
-        }else{
+        }
+        else if(commands.at(0) == "exit"){
+		exit(0);
+	}
+        else{
             std::cout << "Command not recognized" << std::endl;
         }
 
 
-	if(commands.at(0) == "exit"){
-		exit(0);
-	}
-	else{
-		printf("error: command not recognized");
-	}
 
         // Get next command
         std::cout << "> ";
@@ -194,15 +192,26 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
     //   - look up physical address for variable based on its virtual address / offset
    
     //git virtual from variable name and pid located in mmu
-    mmu->pid->var_name->virtual_address;
+    std::vector<Variable*> var = mmu->getVariables(pid);
+    int i;
+    for(i = 0; i < var.size(); i++)
+    {
+    	if(var[i]->name == var_name)
+    	{
+    	    uint32_t virtualAdd = var[i]->virtual_address;
+    	    int datatypesize = sizeof(var[i]->type);
+    	}
+    }
+    
+    virtualAdd + offset *dataTypeSize;
     
     // then add offset to virtual * datasize(of datatype)
     //create method to get the size of the data type
-    int datatypesize = //insert emthod call here
-    virtual_address + offset * datatypesize;
+    
+    uint32_t virtualPlusOffset = virtual_address + offset * datatypesize;
     
     //this is will be used to get physical address
-    addressvalue = pagetable->getPhysicalAddress(pid, line 201);
+    int addressvalue = pagetable->getPhysicalAddress(pid, virtualPlusOffset);
     
     //   - insert `value` into `memory` at physical address
     memcpy((uint8_t*)memory + addressvalue, value, datatypesize);
@@ -217,6 +226,8 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
+    map<string, int>::iterator it;
+    it = page_table.begin();
     std::vector<Variable*> var = mmu->getVariables(pid);
     
     int i;
@@ -252,20 +263,20 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     
     //   - free page if this variable was the only one on a given page
     //loop over all the variables and see how many on each page (do this by checking virtual address)
-    //delete page from page table
-    // crete method to delete page form page table
     for(i = 0; i < page_table.size(); i++)
     {
-    	if(page_table.find(var_name) == i)
+    	uint32_t virtual_address = page_table->getVirtualAddress(page_table->page_number, page_table->_page_size);
+    	if(page_table.find(virtual_address) == i)
     	{
-    		
+    	//delete page from page table
+    		deletePage();
+    	}
+    	// if no other variables have address on the page then the page should become free
+    	if(page_table.find(virtual_address) != i)
+    	{
+    		page_table.erase(it, page_table.end());
     	}
     }
-    
-    
-    
-    // if no other variables have address on the page then the page should become free
-    page_table.erase(it, page_table.end());
     
     
 }
@@ -277,7 +288,7 @@ void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
     // crete method to erase pid
     mmu->_processes.erase(pid);
     
-    //   - free all pages associated with given process
+    //   - free all pages associated with given process   
     // create method erase all page associated with pid
     page_table.erase(pid);
 }

@@ -80,3 +80,13 @@ void PageTable::print()
         //printf("%5u | %d | %d/n", pid, page_number, frame);
     }
 }
+
+uint32_t getVirtualAddress(int page_number, int page_size)
+{
+	return page_number / page_size;
+}
+
+void deletePage()
+{
+	_table.clear();
+}
