@@ -4,7 +4,9 @@ PageTable::PageTable(int page_size)
 {
     _page_size = page_size;
 }
-
+uint32_t PageTable::getSize(){
+    return _page_size;
+}
 PageTable::~PageTable()
 {
 }
