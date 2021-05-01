@@ -162,26 +162,23 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
 void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table)
 {
 	int page_number = 0;
-	//would the virtual_address be the num_elements?
-	// what is var_name used for?
-	// what is type used for? helps determine how big of a space you need
-	//what is num_elements used for?
-	mmu->allocate(pid, var_name, type, num_elements, mmu, page_table, page_table->getSize());
+	
+	mmu->allocate(pid, var_name, type, num_elements, mmu, page_table->getSize());
     // TODO: implement this!
     //   - find first free space within a page already allocated to this process that is large enough to fit the new variable
-    //page_table->addEntry(pid, page_number);
+    
     //   - if no hole is large enough, allocate new page(s)
     
-    // how do I all ocate new pages? Is it by increasing the page size or adding more pages?
+    
     
     //   - insert variable into MMU
-    //whaere do I get the virtual address from?
-    //mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
+    
+    
     
     //   - print virtual memory address 
+	uint32_t virtual_address = page_table->getVirtualAddress(page_number, page_table->getSize());
 
-
-    //printf("Virtual address %s", virtual_address);
+    printf("Virtual address %d", virtual_address);
 
 }
 

@@ -50,7 +50,7 @@ void Mmu::addVariableToProcess(uint32_t pid, std::string var_name, DataType type
         proc->variables.push_back(var);
     }
 }
-uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table, int page_size){
+uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, int page_size){
     int pidStart = -1;
     for(int i = 0; i < _processes.size();i++){
         if(_processes[i]->pid == pid){
@@ -90,7 +90,7 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
     int remaining = num_elements;
 
     //need to loop through our current processes ang get the variable to find free space if no free space is large enough we need to get a new page 
-    int page_size = page_table->getSize();
+    //int page_size = page_table->getSize();
     for(int i = 0; i < _processes[pidStart]->variables.size(); i++){
         
         if(_processes[pidStart]->variables.at(i)->name == "<FREE_SPACE>"){
@@ -183,7 +183,7 @@ void Mmu::freePage(uint32_t pid)
    {
    	if(_processes[i]->pid == pid)
    	{
-   		_processes.erase(pid);
+   		_processes.clear();
    	}
    }
 }
