@@ -172,7 +172,7 @@ void Mmu::removeVariableFromProcess(uint32_t pid)
    {
    	if(_processes[i]->pid == pid)
    	{
-   		_processes.erase(pid);
+   		_processes.clear();
    	}
    }
 }
