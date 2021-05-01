@@ -73,6 +73,9 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
     //now that error checkin is doen 
     int total_size = num_elements;
     int unit_size = 1;
+    
+    std::vector<Variable*>::iterator table;
+
     if(type == DataType::Short){
         total_size = total_size * 2;
         unit_size = 2;
@@ -83,10 +86,35 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
         total_size = total_size *8;
         unit_size = 8;
     }
+    int rem_size = total_size;
+    int remaining = num_elements;
+
     //need to loop through our current processes ang get the variable to find free space if no free space is large enough we need to get a new page 
     int page_size = page_table->getSize();
     for(int i = 0; i < _processes[pidStart]->variables.size(); i++){
-        if()
+        
+        if(_processes[pidStart]->variables.at(i)->name == "<FREE_SPACE>"){
+            if(_processes[pidStart]->variables.at(i)->size < rem_size){
+                //take the free space and make it into the stuff, 
+                //
+            }else if(_processes[pidStart]->variables.at(i)->size >= rem_size){
+                table = mmu->getVariables(pidStart).begin() + i;//this doesnt seem to work 
+
+                //if the free space has more than the remaining size then we can allocate all of it and move one
+                Variable *oldSpace = _processes[pidStart]->variables.at(i);
+                Variable *newSpace = new Variable();
+                int start = oldSpace->virtual_address;
+                int end = start + rem_size;
+                newSpace->size = total_size;
+                newSpace->type = type;
+                newSpace->name = var_name;
+                oldSpace->size = oldSpace->size - total_size;
+                //need to replace the old space and insert our new stuff
+                //put the new space before the old space
+
+
+            }
+        }
     }
     //gets the total size that needed along with how large each value will be 
 
@@ -98,6 +126,14 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
     //   - insert variable into MMU
     //   - print virtual memory address
     return -1;
+}
+Process* Mmu::getProc(uint32_t pid){
+    for(int i = 0; i< _processes.size(); i++){
+        if(_processes[i]->pid == pid){
+            return _processes[i];
+        }
+    }
+    return NULL;
 }
 void Mmu::print()
 {

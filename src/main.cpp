@@ -61,6 +61,7 @@ int main(int argc, char **argv)
             createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
         }else if(commandV.at(0)== "allocate"){
             DataType type;
+
             if(commandV.at(3)=="char"){
                 type = Char;
                 allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
@@ -90,7 +91,7 @@ int main(int argc, char **argv)
                 voidPoint = commandV.at(i);
                 setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
             }
-            setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
+            //setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
         }else if(commandV.at(0)=="free"){
             freeVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), mmu, page_table);
         }else if(commandV.at(0)== "print"){
@@ -180,7 +181,7 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
     //   - print virtual memory address 
 
 
-    printf("Virtual address %s", virtual_address);
+    //printf("Virtual address %s", virtual_address);
 
 }
 
@@ -188,6 +189,7 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
+
    
     //git virtual from variable name and pid located in mmu
     std::vector<Variable*> var = mmu->getVariables(pid);
@@ -214,6 +216,29 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
     
     //   - insert `value` into `memory` at physical address
     memcpy((uint8_t*)memory + addressvalue, value, dataTypeSize);
+    
+    //git virtual from variable name and pid located in mmu
+    Process *curr = mmu->getProc(pid);
+    if(curr == NULL){//checks if the pid exists
+        std::cout  << "error: process not found" << std::endl;
+        return;
+    }
+    
+    //int phys = page_table->getPhysicalAddress(); somehow et the virtual address then get the physical address
+    //then just memcpy based on the data type
+    /*
+    if(type == DataType::Char){
+        memcpt(MemLocal, value, 1);
+    }else if(type == DataType::Short){
+        memcpy(MemLocal, value, 2);
+    }else if(type == DataType::Float || type == DataType::Int){
+        memcpy(MemLocal, value, 4);
+    }else if(type == DataType::Long || type == DataType:: Double){
+        memcpy(MemLocal, value, 8);
+    }
+
+    */
+
     
 
     //use void memory pointer to copy data into memory
