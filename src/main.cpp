@@ -61,7 +61,7 @@ int main(int argc, char **argv)
             createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
         }else if(commandV.at(0)== "allocate"){
             DataType type;
-            for(int i = 0; i < )
+            
             if(commandV.at(3)=="char"){
                 type = Char;
                 allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
                 voidPoint = commandV.at(i);
                 setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
             }
-            setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
+            //setVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), stoi(commandV.at(3)), &voidPoint, mmu, page_table, memory);
         }else if(commandV.at(0)=="free"){
             freeVariable(static_cast<uint32_t>(std::stoul(commandV.at(1))), commandV.at(2), mmu, page_table);
         }else if(commandV.at(0)== "print"){
@@ -178,7 +178,7 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
     
     //   - insert variable into MMU
     //whaere do I get the virtual address from?
-    mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
+    //mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
     
     //   - print virtual memory address 
 

@@ -73,6 +73,8 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
     //now that error checkin is doen 
     int total_size = num_elements;
     int unit_size = 1;
+    int remaining = num_elements;
+    
     if(type == DataType::Short){
         total_size = total_size * 2;
         unit_size = 2;
@@ -83,10 +85,18 @@ uint32_t Mmu::allocate(uint32_t pid, std::string var_name, DataType type, uint32
         total_size = total_size *8;
         unit_size = 8;
     }
+    int rem_size = total_size;
+    
     //need to loop through our current processes ang get the variable to find free space if no free space is large enough we need to get a new page 
     int page_size = page_table->getSize();
     for(int i = 0; i < _processes[pidStart]->variables.size(); i++){
-        if()
+        if(_processes[pidStart]->variables.at(i)->name == "<FREE_SPACE>" && _processes[pidStart]->variables.at(i)->size >= total_size){
+            //_processes[pidStart]->variables.erase()
+            //need to 
+        }else{
+            //do nothing
+
+        }
     }
     //gets the total size that needed along with how large each value will be 
 
