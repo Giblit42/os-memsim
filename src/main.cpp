@@ -183,7 +183,7 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
     //   - print virtual memory address 
 
 
-    printf("Virtual address %s", virtual_address);
+    //printf("Virtual address %s", virtual_address);
 
 }
 
@@ -191,20 +191,28 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 {
     // TODO: implement this!
     //   - look up physical address for variable based on its virtual address / offset
-   
+    
     //git virtual from variable name and pid located in mmu
-    mmu->pid->var_name->virtual_address;
+    Process *curr = mmu->getProc(pid);
+    if(curr == NULL){//checks if the pid exists
+        std::cout  << "error: process not found" << std::endl;
+        return;
+    }
     
-    // then add offset to virtual * datasize(of datatype)
-    //create method to get the size of the data type
-    int datatypesize = //insert emthod call here
-    virtual_address + offset * datatypesize;
-    
-    //this is will be used to get physical address
-    addressvalue = pagetable->getPhysicalAddress(pid, line 201);
-    
-    //   - insert `value` into `memory` at physical address
-    memcpy((uint8_t*)memory + addressvalue, value, datatypesize);
+    //int phys = page_table->getPhysicalAddress(); somehow et the virtual address then get the physical address
+    //then just memcpy based on the data type
+    /*
+    if(type == DataType::Char){
+        memcpt(MemLocal, value, 1);
+    }else if(type == DataType::Short){
+        memcpy(MemLocal, value, 2);
+    }else if(type == DataType::Float || type == DataType::Int){
+        memcpy(MemLocal, value, 4);
+    }else if(type == DataType::Long || type == DataType:: Double){
+        memcpy(MemLocal, value, 8);
+    }
+
+    */
     
 
     //use void memory pointer to copy data into memory
