@@ -38,6 +38,8 @@ public:
     uint32_t getVirtualAddress(int page_number, int page_size);
     void deletePage();
     void print();
+    std::map<std::string, int> _ptable = _table;
+	
 };
 
 #endif // __PAGETABLE_H_

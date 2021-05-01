@@ -61,7 +61,6 @@ int main(int argc, char **argv)
             createProcess(stoi(commandV.at(1)), stoi(commandV.at(2)), mmu, page_table);
         }else if(commandV.at(0)== "allocate"){
             DataType type;
-            for(int i = 0; i < )
             if(commandV.at(3)=="char"){
                 type = Char;
                 allocateVariable(stoi(commandV.at(1)), commandV.at(2), type, stoi(commandV.at(4)), mmu, page_table);
@@ -155,7 +154,7 @@ void createProcess(int text_size, int data_size, Mmu *mmu, PageTable *page_table
     
     //   - print pid
     //I think the pid comes from createProcess
-    printf("PID %s", mmu->createProcess());
+    printf("PID %d", mmu->createProcess());
     
 }
 
@@ -176,7 +175,7 @@ void allocateVariable(uint32_t pid, std::string var_name, DataType type, uint32_
     
     //   - insert variable into MMU
     //whaere do I get the virtual address from?
-    mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
+    //mmu->addVariableToProcess(pid, var_name, type, size, page_table->getPhysicalAddress(pid, num_elements));
     
     //   - print virtual memory address 
 
@@ -193,27 +192,28 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
     //git virtual from variable name and pid located in mmu
     std::vector<Variable*> var = mmu->getVariables(pid);
     int i;
+    uint32_t virtualAdd;
+    int dataTypeSize;
     for(i = 0; i < var.size(); i++)
     {
     	if(var[i]->name == var_name)
     	{
-    	    uint32_t virtualAdd = var[i]->virtual_address;
-    	    int datatypesize = sizeof(var[i]->type);
+    	    virtualAdd = var[i]->virtual_address;
+    	    dataTypeSize = sizeof(var[i]->type);
     	}
     }
     
-    virtualAdd + offset *dataTypeSize;
     
     // then add offset to virtual * datasize(of datatype)
     //create method to get the size of the data type
     
-    uint32_t virtualPlusOffset = virtual_address + offset * datatypesize;
+    uint32_t virtualPlusOffset = virtualAdd + offset *dataTypeSize;
     
     //this is will be used to get physical address
-    int addressvalue = pagetable->getPhysicalAddress(pid, virtualPlusOffset);
+    int addressvalue = page_table->getPhysicalAddress(pid, virtualPlusOffset);
     
     //   - insert `value` into `memory` at physical address
-    memcpy((uint8_t*)memory + addressvalue, value, datatypesize);
+    memcpy((uint8_t*)memory + addressvalue, value, dataTypeSize);
     
 
     //use void memory pointer to copy data into memory
@@ -225,8 +225,14 @@ void setVariable(uint32_t pid, std::string var_name, uint32_t offset, void *valu
 void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_table)
 {
     // TODO: implement this!
-    map<string, int>::iterator it;
-    it = page_table.begin();
+    int page_number = 0;
+    std::map<std::string, int>::iterator it;
+    std::vector<std::string> keys;
+    for(it = page_table->_ptable.begin(); it != page_table->_ptable.end(); it++)
+    {
+    	keys.push_back(it->first);
+    }
+    
     std::vector<Variable*> var = mmu->getVariables(pid);
     
     int i;
@@ -249,34 +255,37 @@ void freeVariable(uint32_t pid, std::string var_name, Mmu *mmu, PageTable *page_
     		{
     			var[i-1]->size + var[i]->size + var[i+1]->size;
     		}
+    		//   - remove entry from MMU
+    		page_table->_ptable.erase(var[i]->name);
     	}
     }
     
-    
-    //   - remove entry from MMU
-    if(page_table.find(var_name))
-    {
-    	page_table.erase(var_name);
-        
-    }
     
     
     //   - free page if this variable was the only one on a given page
     //loop over all the variables and see how many on each page (do this by checking virtual address)
-    for(i = 0; i < page_table.size(); i++)
+    
+    uint32_t virtual_address = page_table->getVirtualAddress(page_number, page_table->getSize());
+    std::string str = std::__cxx11::to_string(virtual_address);
+    
+    for(it = page_table->_ptable.begin(); it != page_table->_ptable.end(); it++)
     {
-    	uint32_t virtual_address = page_table->getVirtualAddress(page_table->page_number, page_table->_page_size);
-    	if(page_table.find(virtual_address) == i)
+        //uint32_t virtual_address = page_table->getVirtualAddress(page_number, page_table->getSize());
+        //str = to_string(virtual_address);
+    	keys.push_back(it->first);
+    	
+    	if(keys.at(i) == str)
     	{
     	//delete page from page table
-    		deletePage();
+    		page_table->deletePage();
     	}
     	// if no other variables have address on the page then the page should become free
-    	if(page_table.find(virtual_address) != i)
+    	if(keys.at(i) != str)
     	{
-    		page_table.erase(it, page_table.end());
+    		page_table->_ptable.erase(it, page_table->_ptable.end());
     	}
     }
+    
     
     
 }
@@ -286,9 +295,9 @@ void terminateProcess(uint32_t pid, Mmu *mmu, PageTable *page_table)
     // TODO: implement this!
     //   - remove process from MMU
     // crete method to erase pid
-    mmu->_processes.erase(pid);
+    mmu->removeVariableFromProcess(pid);
     
     //   - free all pages associated with given process   
     // create method erase all page associated with pid
-    page_table.erase(pid);
+    mmu->freePage(pid);
 }

@@ -31,6 +31,8 @@ public:
     uint32_t allocate(uint32_t pid, std::string var_name, DataType type, uint32_t num_elements, Mmu *mmu, PageTable *page_table, int page_size);
     uint32_t createProcess();
     void addVariableToProcess(uint32_t pid, std::string var_name, DataType type, uint32_t size, uint32_t address);
+    void removeVariableFromProcess(uint32_t pid);
+    void freePage(uint32_t pid);
     void print();
     std::vector<Variable*>& getVariables(uint32_t pid);
 };

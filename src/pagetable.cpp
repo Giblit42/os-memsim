@@ -83,12 +83,13 @@ void PageTable::print()
     }
 }
 
-uint32_t getVirtualAddress(int page_number, int page_size)
+uint32_t PageTable::getVirtualAddress(int page_number, int page_size)
 {
 	return page_number / page_size;
 }
 
-void deletePage()
+void PageTable::deletePage()
 {
 	_table.clear();
 }
+

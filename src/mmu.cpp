@@ -129,3 +129,25 @@ std::vector<Variable*>& Mmu::getVariables(uint32_t pid)
 		}
 	}
 }
+void Mmu::removeVariableFromProcess(uint32_t pid)
+{
+   int i;
+   for(i = 0; i < _processes.size(); i++)
+   {
+   	if(_processes[i]->pid == pid)
+   	{
+   		_processes.erase(pid);
+   	}
+   }
+}
+void Mmu::freePage(uint32_t pid)
+{
+	int i;
+   for(i = 0; i < _processes.size(); i++)
+   {
+   	if(_processes[i]->pid == pid)
+   	{
+   		_processes.erase(pid);
+   	}
+   }
+}
